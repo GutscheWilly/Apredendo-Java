@@ -2,7 +2,7 @@ package employee.outsource;
 
 import employee.Employee;
 
-public class OutsourceEmployee extends Employee{
+public class OutsourceEmployee extends Employee {
     
     private Double addicionalCharge;
 
