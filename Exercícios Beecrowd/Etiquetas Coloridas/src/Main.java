@@ -13,7 +13,13 @@ public class Main {
 
         int result = calculateQuantityMaxOfHangTags(values);
 
+        for (int i = 0 ; i < 3 ; i++) {
+            System.out.println("\n" + values[i]);
+        }
+
         System.out.println("\n" + result);
+
+        scanner.close();
     }
 
     public static int convertHexadecimalToDecimal(String hexadecimal) {
@@ -45,13 +51,30 @@ public class Main {
     }
 
     public static int calculateQuantityMaxOfHangTags(int[] values) {
-        int quantityMaxOfGreen = calculateArea(values[0]) / calculateArea(values[1]);
-        int quantityMaxOfBlue = calculateArea(values[1]) / calculateArea(values[2]) * quantityMaxOfGreen;
-        
-        return quantityMaxOfGreen + quantityMaxOfBlue + 1;
+        int quantityMaxOfGreenHangTags = (int)Math.pow(values[0] / calculateMDC(values[0], values[1]), 2);
+        int quantityMaxOfBlueHangTags = (int)Math.pow(values[1] / calculateMDC(values[1], values[2]), 2) * quantityMaxOfGreenHangTags;
+        return quantityMaxOfGreenHangTags + quantityMaxOfBlueHangTags + 1;
     }
 
-    public static int calculateArea(int side) {
-        return (int)Math.pow(side, 2);
+    public static int calculateMDC(int firtValue, int secondValue) {
+        int mdcBetweenTheNumbers = 1;
+        int divider = 2;
+
+        while (firtValue != 1 && secondValue != 1) {
+            while (firtValue % divider == 0 || secondValue % divider == 0) {
+                if (firtValue % divider == 0 && secondValue % divider == 0) {
+                    mdcBetweenTheNumbers *= divider;
+                }
+                if (firtValue % divider == 0) {
+                    firtValue /= divider;
+                }
+                if (secondValue % divider == 0) {
+                    secondValue /= divider;
+                }
+            }
+            divider++;
+        }
+
+        return mdcBetweenTheNumbers;
     }
 }
