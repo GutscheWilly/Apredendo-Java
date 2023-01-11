@@ -24,6 +24,10 @@ public class Square {
         return safeArrow;
     }
 
+    public void setSafeArrow(Boolean safeArrow) {
+        this.safeArrow = safeArrow;
+    }
+
     public Board getBoard() {
         return board;
     }

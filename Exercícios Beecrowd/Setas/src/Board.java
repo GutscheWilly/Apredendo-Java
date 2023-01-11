@@ -3,19 +3,34 @@ import java.util.Scanner;
 public class Board {
     
     private Integer size;
-    private Square[][] squares;
+    private Square[][] squareMatrix;
 
     public Board(Integer size, Scanner scanner) {
         this.size = size;
-        squares = new Square[size][size];
-        requestInitialSquares(scanner);
+        squareMatrix = new Square[size][size];
+        requestInitialSquareMatrix(scanner);
     }
 
-    private void requestInitialSquares(Scanner scanner) {
+    private void requestInitialSquareMatrix(Scanner scanner) {
         for (int i = 0 ; i < size ; i++) {
             String lineRequest = scanner.nextLine();
             for (int j = 0 ; j < size ; j++) {
-                squares[i][j] = new Square(lineRequest.charAt(j), new Position(i, j), this);
+                squareMatrix[i][j] = new Square(lineRequest.charAt(j), new Position(i, j), this);
+            }
+        }
+        assignSafeArrows();
+    }
+    
+    private void assignSafeArrows() {
+        for (int i = 0 ; i < size ; i++) {
+            for (int j = 0 ; j < size ; j++) {
+                Square currentSquare = squareMatrix[i][j];
+                Square targetSquare = getSquare(currentSquare.targetPosition());
+                if (currentSquare.isSafeArrow() && !targetSquare.isSafeArrow()) {
+                    currentSquare.setSafeArrow(false);
+                    assignSafeArrows();
+                    break;
+                }
             }
         }
     }
@@ -24,17 +39,32 @@ public class Board {
         return size;
     }
 
-    public Square[][] getSquares() {
-        return squares;
+    public Square[][] getSquareMatrix() {
+        return squareMatrix;
     }
 
     public Square getSquare(Position position) {
-        return squares[position.getRow()][position.getColumn()];
+        if (!positionExists(position)) {
+            return null;
+        }
+        return squareMatrix[position.getRow()][position.getColumn()];
     }
 
     public boolean positionExists(Position position) {
         return position.getRow() >= 0 && position.getRow() < size && position.getColumn() >= 0 && position.getColumn() < size;
     }
 
-    
+    public Integer quantityOfSafeArrows() {
+        Integer quantityOfSafeArrows = 0;
+
+        for (int i = 0 ; i < size ; i++) {
+            for (int j = 0 ; j < size ; j++) {
+                if (squareMatrix[i][j].isSafeArrow()) {
+                    quantityOfSafeArrows++;
+                }
+            }
+        }
+
+        return quantityOfSafeArrows;
+    }
 }
