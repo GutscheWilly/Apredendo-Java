@@ -22,4 +22,9 @@ public class Node {
     public void setPreviousNode(Node previousNode) {
         this.previousNode = previousNode;
     }
+
+    @Override
+    public String toString() {
+        return value.toString();
+    }
 }
