@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,9 +16,10 @@ public class App {
         List<Product> productList = getProductsFromFile(file);
         Double averagePrice = productList.stream().map(x -> x.getPrice()).reduce(0.0, (x, y) -> x + y) / productList.size();
         List<Product> productsCheaperThanAveragePrice = productList.stream().filter(x -> x.getPrice() < averagePrice).collect(Collectors.toList());
-        List<String> nameOfproductsCheaperThanAveragePrice = productsCheaperThanAveragePrice.stream().map(x -> x.getName()).sorted((x, y) -> -x.compareTo(y)).collect(Collectors.toList());
+        Comparator<String> comparator = (x, y) -> x.toUpperCase().compareTo(y.toUpperCase());
+        List<String> nameOfproductsCheaperThanAveragePrice = productsCheaperThanAveragePrice.stream().map(x -> x.getName()).sorted(comparator.reversed()).collect(Collectors.toList());
         System.out.printf("Average price: %.2f\n", averagePrice);
-        nameOfproductsCheaperThanAveragePrice.forEach(x -> System.out.println(x));
+        nameOfproductsCheaperThanAveragePrice.forEach(System.out::println);
     }
 
     public static List<Product> getProductsFromFile(File file) {
